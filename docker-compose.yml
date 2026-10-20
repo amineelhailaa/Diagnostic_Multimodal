@@ -7,11 +7,8 @@ services:
       - "127.0.0.1:8888:8888"
     volumes:
       - .:/workspace
-      - ./Data:/workspace/Data:ro
+      - ./Data:/workspace/Data
     working_dir: /workspace
-    init: true
-    shm_size: 2gb
-    restart: unless-stopped
 
   streamlit:
     build:
@@ -19,8 +16,10 @@ services:
       dockerfile: docker/Dockerfile.streamlit
     ports:
       - "127.0.0.1:8501:8501"
+    environment:
+      BRAINSCAN_MODEL_PATH: /workspace/checkpoints/best_model.keras
     volumes:
       - ./Data:/workspace/Data:ro
       - ./models:/workspace/models:ro
+      - ./notebooks/checkpoints:/workspace/checkpoints:ro
     init: true
-    restart: unless-stopped
